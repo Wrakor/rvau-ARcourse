@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+public class BallController : MonoBehaviour {
 
 	private Rigidbody rb;
 	public float speed;
@@ -16,10 +16,9 @@ public class PlayerController : MonoBehaviour {
 
 
 	void OnCollisionExit(Collision collisionInfo) {
-		print ("No longer in contact with " + collisionInfo.transform.name);
+		//print ("No longer in contact with " + collisionInfo.transform.name);
 		if (collisionInfo.collider.gameObject.CompareTag ("Block")) {
-			collisionInfo.collider.gameObject.SetActive (false);
-			
+			Destroy( collisionInfo.collider.gameObject);			
 		}
 	}
 } 
