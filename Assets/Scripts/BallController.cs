@@ -13,7 +13,17 @@ public class BallController : MonoBehaviour {
 		rb.velocity = new Vector3 (0, 0, speed);
 	}
 
+	// Aplicar força na bola conforme o movimento do pad
+	void OnCollisionEnter(Collision collisionInfo) {
 
+		if (collisionInfo.gameObject.CompareTag ("Pad")) {
+
+			if (Input.GetKey (KeyCode.UpArrow))
+				this.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(-speed, 0f, speed);
+			else if (Input.GetKey (KeyCode.DownArrow))
+				this.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(speed, 0f, speed);
+		}
+	}
 
 	void OnCollisionExit(Collision collisionInfo) {
 		//print ("No longer in contact with " + collisionInfo.transform.name);

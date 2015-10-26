@@ -4,6 +4,7 @@ using System.Collections;
 public class PadController : MonoBehaviour {
 
 	public float moveDistance;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -11,6 +12,7 @@ public class PadController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update() {
+
 		/*if (Input.GetMouseButton(0)){
 
 			print ("Pressed mouse in position: " + (Input.mousePosition.x-762.0f));
@@ -21,6 +23,7 @@ public class PadController : MonoBehaviour {
 
 		if (Input.GetKey (KeyCode.UpArrow)) 
 			transform.position = new Vector3 (transform.position.x -moveDistance, transform.position.y, transform.position.z);
+
 
 		if (Input.GetKey (KeyCode.DownArrow)) 
 			transform.position = new Vector3 (transform.position.x +moveDistance, transform.position.y, transform.position.z);
