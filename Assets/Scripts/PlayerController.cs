@@ -22,14 +22,14 @@ public class PlayerController : MonoBehaviour {
 		/*
 		transform.position = new Vector3 ((Input.mousePosition.x-(Screen.width/2))*0.1f, 0.5f, -15f);*/
 
-		if (this.gameObject.name == "Player1") {
+		if (this.gameObject.name == "Player2") {
 			if (Input.GetKey (KeyCode.UpArrow)) 
 				transform.position = new Vector3 (transform.position.x - moveDistance, transform.position.y, transform.position.z);
 
 			if (Input.GetKey (KeyCode.DownArrow)) 
 				transform.position = new Vector3 (transform.position.x + moveDistance, transform.position.y, transform.position.z);
 		} 
-		else if (this.gameObject.name == "Player2") {
+		else if (this.gameObject.name == "Player1") {
 			if (Input.GetKey (KeyCode.W)) 
 				transform.position = new Vector3 (transform.position.x - moveDistance, transform.position.y, transform.position.z);
 			

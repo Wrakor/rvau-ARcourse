@@ -6,8 +6,10 @@ public class BallController : MonoBehaviour {
 	private Rigidbody rb;
 	public float speed;
 	private Vector3 initialposition;
+	public int lastPlayer;
 
 	void Start(){
+		lastPlayer = 1;
 		this.gameObject.GetComponent<MeshRenderer> ().enabled = true;
 		initialposition = transform.position;
 		rb = GetComponent<Rigidbody> ();
@@ -23,15 +25,20 @@ public class BallController : MonoBehaviour {
 
 		if (collisionInfo.gameObject.CompareTag ("Player")) {
 
-			if (Input.GetKey (KeyCode.UpArrow))
-				this.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed, 0f, speed);
-			else if (Input.GetKey (KeyCode.DownArrow))
-				this.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (speed, 0f, speed);
-			else if (Input.GetKey (KeyCode.W))
-				this.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed, 0f, -speed);
-			else if (Input.GetKey (KeyCode.S))
-				this.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (speed, 0f, -speed);
-
+			if (collisionInfo.gameObject.name == "Player1") {
+				lastPlayer = 1;
+				if (Input.GetKey (KeyCode.W))
+					this.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed, 0f, speed);
+				else if (Input.GetKey (KeyCode.S))
+					this.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (speed, 0f, speed);
+			}
+			else {
+				lastPlayer = 2;
+				if (Input.GetKey (KeyCode.UpArrow))
+					this.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed, 0f, -speed);
+				else if (Input.GetKey (KeyCode.DownArrow))
+					this.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (speed, 0f, -speed);
+			}
 		} 
 		else if (collisionInfo.gameObject.CompareTag ("EndWall")) {
 			StartCoroutine(newBall(collisionInfo.gameObject));
@@ -47,7 +54,7 @@ public class BallController : MonoBehaviour {
 			Instantiate (this.gameObject, new Vector3 (initialposition.x, initialposition.y, 15), transform.rotation);
 			GameObject.Find ("Player2").GetComponent<PlayerController> ().incrementScore(3);
 		} else {
-			Instantiate (this.gameObject, new Vector3 (transform.position.x, transform.position.y, -15), transform.rotation);
+			Instantiate (this.gameObject, new Vector3 (initialposition.x, initialposition.y, -15), transform.rotation);
 			GameObject.Find ("Player1").GetComponent<PlayerController>().incrementScore(3);
 		}
 
@@ -57,7 +64,7 @@ public class BallController : MonoBehaviour {
 	void OnCollisionExit(Collision collisionInfo) {
 		//print ("No longer in contact with " + collisionInfo.transform.name);
 		if (collisionInfo.collider.gameObject.CompareTag ("Block")) {
-			Destroy( collisionInfo.collider.gameObject);			
+			//Destroy( collisionInfo.collider.gameObject);			
 		}
 	}
 } 

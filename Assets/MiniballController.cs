@@ -7,6 +7,9 @@ public class MiniballController : MonoBehaviour {
 		GameObject[] blocks = GameObject.FindGameObjectsWithTag ("Block");
 		for (int i = 0; i < blocks.Length; i++)
 			Physics.IgnoreCollision(this.gameObject.GetComponent<Collider>(), blocks[i].GetComponent<Collider>());
+
+		Physics.IgnoreCollision(this.gameObject.GetComponent<Collider>(), 
+		                        GameObject.FindGameObjectWithTag("Ball").GetComponent<Collider>());
 	}
 	void OnCollisionEnter(Collision collisionInfo) {
 
