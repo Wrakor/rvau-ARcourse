@@ -6,18 +6,16 @@ public class BallController : MonoBehaviour {
 	private Rigidbody rb;
 	public float speed;
 	private Vector3 initialposition;
-	public int lastPlayer;
+	public static int lastPlayer;
 
 	void Start(){
 		lastPlayer = 1;
+
 		this.gameObject.GetComponent<MeshRenderer> ().enabled = true;
 		initialposition = transform.position;
-		rb = GetComponent<Rigidbody> ();
 
-		if (transform.position.z > 0)
-			rb.velocity = new Vector3 (0, 0, -speed);
-		else
-			rb.velocity = new Vector3 (0, 0, speed);
+		rb = GetComponent<Rigidbody> ();
+		rb.velocity = new Vector3 (0, 0, speed);
 	}
 
 	// Aplicar força na bola conforme o movimento do pad
@@ -51,14 +49,21 @@ public class BallController : MonoBehaviour {
 		yield return new WaitForSeconds (1.5f);
 
 		if (go.name == "SouthWall") { //pontos para o p2 
-			Instantiate (this.gameObject, new Vector3 (initialposition.x, initialposition.y, 15), transform.rotation);
 			GameObject.Find ("Player2").GetComponent<PlayerController> ().incrementScore(3);
+
+			float player2X = GameObject.Find("Player2").transform.position.x;
+			this.transform.position = new Vector3 (player2X, initialposition.y, 15);
+			rb.velocity = new Vector3 (0, 0, -speed);
+
 		} else {
-			Instantiate (this.gameObject, new Vector3 (initialposition.x, initialposition.y, -15), transform.rotation);
 			GameObject.Find ("Player1").GetComponent<PlayerController>().incrementScore(3);
+
+			float player1X = GameObject.Find("Player1").transform.position.x;
+			this.transform.position = new Vector3(player1X, initialposition.y, -15);
+			rb.velocity = new Vector3 (0, 0, speed);
 		}
 
-		Destroy(this.gameObject);
+		this.gameObject.GetComponent<MeshRenderer> ().enabled = true;
 	}
 
 	void OnCollisionExit(Collision collisionInfo) {

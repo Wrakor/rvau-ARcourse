@@ -20,7 +20,7 @@ public class BlockController : MonoBehaviour {
 		if (collisionInfo.gameObject.CompareTag ("Ball")) {
 			GameObject miniball = (GameObject) Instantiate (GameObject.FindGameObjectWithTag("Miniball"), collisionInfo.transform.position, collisionInfo.transform.rotation);
 			miniball.GetComponent<Rigidbody>().velocity = -collisionInfo.gameObject.GetComponent<Rigidbody>().velocity;
-			if (collisionInfo.gameObject.GetComponent<BallController>().lastPlayer == 1)
+			if (BallController.lastPlayer == 1)
 				GameObject.Find ("Player1").GetComponent<PlayerController>().incrementScore(1);
 			else
 				GameObject.Find ("Player2").GetComponent<PlayerController>().incrementScore(1);
@@ -33,23 +33,35 @@ public class BlockController : MonoBehaviour {
 	}
 	 
 	IEnumerator PowerUp(GameObject ball) {
-		int random = Random.Range (1, 4);
 
-		if (random == 1)
+		this.gameObject.GetComponent<Renderer> ().enabled = false;
+		this.gameObject.GetComponent<Collider> ().enabled = false;
+
+		int random = Random.Range (1, 6);
+
+		if (random >= 1 && random <=3) {
+			ball.GetComponent<Rigidbody> ().velocity = ball.GetComponent<Rigidbody> ().velocity * 1.5f;
+			yield return new WaitForSeconds (3);
 			ball.GetComponent<Rigidbody> ().velocity = ball.GetComponent<Rigidbody> ().velocity / 1.5f;
-		if (random == 2) {
+		} else if (random == 4) {
 			print ("rotate time");
 			if (!rotate) {
 				rotate = true;
-				yield return new WaitForSeconds (3);
-				Camera.main.transform.rotation = Quaternion.Euler (new Vector3(90, 270, 0));
+				yield return new WaitForSeconds (4);
+				Camera.main.transform.rotation = Quaternion.Euler (new Vector3 (90, 270, 0));
 				rotate = false;
 			}
+		} else if (random == 5) {
+			GameObject.Find ("Directional Light").GetComponent<Light>().enabled = false;
+			yield return new WaitForSeconds (1f);
+			GameObject.Find ("Directional Light").GetComponent<Light>().enabled = true;
 		}
+
+		Destroy (this.gameObject);
 	}
 
 	void FixedUpdate() {
-		float degreesPerSecond = 20.0f;
+		float degreesPerSecond = 30.0f;
 
 		if (rotate == true)
 		if (Camera.main.transform.rotation != Quaternion.Euler (new Vector3 (90, 90, 0))) {

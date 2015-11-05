@@ -5,8 +5,11 @@ public class MiniballController : MonoBehaviour {
 
 	void Start() {
 		GameObject[] blocks = GameObject.FindGameObjectsWithTag ("Block");
-		for (int i = 0; i < blocks.Length; i++)
-			Physics.IgnoreCollision(this.gameObject.GetComponent<Collider>(), blocks[i].GetComponent<Collider>());
+		for (int i = 0; i < blocks.Length; i++) {
+			if (blocks[i].GetComponent<Collider>().enabled)
+				Physics.IgnoreCollision (this.gameObject.GetComponent<Collider> (), blocks [i].GetComponent<Collider> ());
+
+		}
 
 		Physics.IgnoreCollision(this.gameObject.GetComponent<Collider>(), 
 		                        GameObject.FindGameObjectWithTag("Ball").GetComponent<Collider>());
