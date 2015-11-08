@@ -8,14 +8,14 @@ public class PlayerController : MonoBehaviour {
 	protected int score = 0;
 	float topBorder = -12.5f, bottomBorder = 12.5f;
 
+	//adiciona pontos e atualiza o texto da UI
 	public void incrementScore(int amount) {
 		score += amount;
 
-		if (this.gameObject.name == "Player1") {
-			GameObject.Find("Player1Score").GetComponent<Text>().text = "Player 1: " + score;
-		}
+		if (this.gameObject.name == "Player1") 
+			GameObject.Find("Player1Score").GetComponent<Text>().text = "White: " + score;
 		else
-			GameObject.Find("Player2Score").GetComponent<Text>().text = "Player 2: " + score;
+			GameObject.Find("Player2Score").GetComponent<Text>().text = "Black: " + score;
 	}
 	
 	// Update is called once per frame
@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour {
 		/*
 		transform.position = new Vector3 ((Input.mousePosition.x-(Screen.width/2))*0.1f, 0.5f, -15f);*/
 
+		//Evitar que os jogadores passem os limites do campo
 		if (this.gameObject.name == "Player2") {
 
 			if (Input.GetKey (KeyCode.UpArrow) && (transform.position.x - moveDistance > topBorder)) 
@@ -38,5 +39,20 @@ public class PlayerController : MonoBehaviour {
 			if (Input.GetKey (KeyCode.S) && transform.position.x + moveDistance < bottomBorder)
 				transform.position = new Vector3 (transform.position.x + moveDistance, transform.position.y, transform.position.z);
 		}
+
+		if (score >= 25) 
+			endGame();		
+
 	}
+
+	void endGame() {
+		GameObject.Find ("Ball").GetComponent<Rigidbody>().velocity = new Vector3(0,0,0);
+
+		if (this.gameObject.name == "Player1")
+			GameObject.Find ("Winner").GetComponent<Text>().text = "White Player Wins! \n(Click to Play again)";
+		else
+			GameObject.Find ("Winner").GetComponent<Text>().text = "Black Player Wins! \n(Click to Play again)";
+	}
+
+
 }

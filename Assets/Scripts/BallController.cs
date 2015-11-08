@@ -5,20 +5,26 @@ public class BallController : MonoBehaviour {
 
 	private Rigidbody rb;
 	public float speed;
-	private Vector3 initialposition;
+	private static Vector3 initialposition;
 	public static int lastPlayer;
 
 	void Start(){
 		lastPlayer = 1;
-
-		this.gameObject.GetComponent<MeshRenderer> ().enabled = true;
 		initialposition = transform.position;
 
 		rb = GetComponent<Rigidbody> ();
 		rb.velocity = new Vector3 (0, 0, speed);
 	}
 
-	// Aplicar força na bola conforme o movimento do pad
+	void Update() {
+		if (this.transform.position.x > 50 || this.transform.position.x < -50 || this.transform.position.y > 50 || this.transform.position.y < -50) {
+			this.transform.position = initialposition;
+			print ("fodeu");
+		}
+
+	}
+
+	// Aplicar força na bola conforme o movimento do pad do jogador
 	void OnCollisionEnter(Collision collisionInfo) {
 
 		if (collisionInfo.gameObject.CompareTag ("Player")) {
@@ -42,34 +48,34 @@ public class BallController : MonoBehaviour {
 			StartCoroutine(newBall(collisionInfo.gameObject));
 		}
 	}
-
+	
 	IEnumerator newBall(GameObject go) {
-		rb.velocity = new Vector3 (0, 0, 0);
+		//Desativar a bola, atribuir pontos, escolher nova posicao de inicio da bola e reativa-la
 		this.gameObject.GetComponent<MeshRenderer> ().enabled = false;
+		this.gameObject.GetComponent<Collider> ().enabled = false;
 		yield return new WaitForSeconds (1.5f);
 
+		speed = 19;
 		if (go.name == "SouthWall") { //pontos para o p2 
 			GameObject.Find ("Player2").GetComponent<PlayerController> ().incrementScore(3);
 
 			float player2X = GameObject.Find("Player2").transform.position.x;
-			this.transform.position = new Vector3 (player2X, initialposition.y, 15);
+			this.transform.position = new Vector3 (player2X, initialposition.y, 20);
 			rb.velocity = new Vector3 (0, 0, -speed);
 
-		} else {
+		} else { //pontos para o p1
 			GameObject.Find ("Player1").GetComponent<PlayerController>().incrementScore(3);
 
 			float player1X = GameObject.Find("Player1").transform.position.x;
-			this.transform.position = new Vector3(player1X, initialposition.y, -15);
+			this.transform.position = new Vector3(player1X, initialposition.y, -20);
 			rb.velocity = new Vector3 (0, 0, speed);
 		}
 
 		this.gameObject.GetComponent<MeshRenderer> ().enabled = true;
+		this.gameObject.GetComponent<Collider> ().enabled = true;
 	}
 
-	void OnCollisionExit(Collision collisionInfo) {
-		//print ("No longer in contact with " + collisionInfo.transform.name);
-		if (collisionInfo.collider.gameObject.CompareTag ("Block")) {
-			//Destroy( collisionInfo.collider.gameObject);			
-		}
+	void playAgain() {
+		Application.LoadLevel (Application.loadedLevel);		
 	}
 } 
