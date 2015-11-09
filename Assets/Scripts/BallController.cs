@@ -19,7 +19,7 @@ public class BallController : MonoBehaviour {
 	void Update() {
 		if (this.transform.position.x > 50 || this.transform.position.x < -50 || this.transform.position.y > 50 || this.transform.position.y < -50) {
 			this.transform.position = initialposition;
-			print ("fodeu");
+
 		}
 
 	}
