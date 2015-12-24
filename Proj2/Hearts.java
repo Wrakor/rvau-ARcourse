@@ -10,28 +10,16 @@ public class Hearts {
 
     private static ArrayList<Player> players = new ArrayList<>();
     private static ArrayList<Card> cards = new ArrayList<>();
-    private static int nRounds = 10, winningPlayer = 0;
+    private static int nRounds = 1, winningPlayer = 0;
 
     public static HashMap<String, Integer> cardValue = new HashMap<>();
 
     public Hearts() {
-        String args[] = {};
-        main(args);
-    }
-
-    public static void main(String args[]) {
         initializePlayers();
-        initializeFigureCards();
-
-        for (int i = 0; i < nRounds; i++) {
-            //addCards();
-            playRound();
-        }
-
-        getWinner();
+        initializeCardsValue();
     }
 
-    private static void initializeFigureCards() {
+    private static void initializeCardsValue() {
         cardValue.put("1", 1);
         cardValue.put("2", 2);
         cardValue.put("3", 3);
@@ -53,7 +41,7 @@ public class Hearts {
             players.add(new Player(i));
     }
 
-    private static void addCard(String value, String suit) {
+    public static void addCard(String value, String suit) {
         /*cards.add(new Card("2", "espadas"));
         cards.add(new Card("3", "espadas"));
         cards.add(new Card("5", "copas"));
@@ -62,24 +50,16 @@ public class Hearts {
         cards.add(new Card(value, suit));
     }
 
-    private static void playRound() {
-
-        while (cards.size() != 4) { //esperar que as cartas sejam jogadas
-            try {
-                System.out.println("size:"+cards.size());
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        getRoundWinner();
+    public void addCards(ArrayList<Card> cards) {
+        if (cards.size() == 4)
+            this.cards = cards;
     }
 
-    private static void getRoundWinner() {
+    private static int getRoundWinner() {
         String firstCardSuit = cards.get(winningPlayer).getSuit();
         String firstCardValue = cards.get(winningPlayer).getValue();
         int nHearts = 0;
+        nRounds++;
 
         // Encontrar jogador vencedor da ronda, que vai apanhar as cartas e jogar primeiro a seguir
         for (int i = 0; i < 4; i++) {
@@ -101,6 +81,11 @@ public class Hearts {
         //Adicionar copas ao vencedor da ronda
         players.get(winningPlayer).addHearts(nHearts);
         cards = new ArrayList<>();
+
+        if (nRounds == 13)
+            getWinner();
+
+        return winningPlayer;
     }
 
     private static boolean valueBiggerThan(String value1, String value2) {
