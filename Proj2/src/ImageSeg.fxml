@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ImageSegController">
+	<center>
+		<VBox alignment="CENTER">
+			<padding>
+				<Insets left="10" right="10" />
+			</padding>
+   <children>
+   			<ImageView fx:id="originalFrame" />
+            <Button fx:id="cameraButton" mnemonicParsing="false" onAction="#startCamera" text="Start Camera" />
+   </children>
+		</VBox>
+	</center>
+   <top>
+      <Label fx:id="carta1" text="Jogador 3" BorderPane.alignment="CENTER" />
+   </top>
+   <left>
+      <Label fx:id="carta2" text="Jogador 2" BorderPane.alignment="CENTER" />
+   </left>
+   <right>
+      <Label fx:id="carta4" text="Jogador 4" BorderPane.alignment="CENTER" />
+   </right>
+   <bottom>
+      <Label fx:id="carta3" text="Jogador 1" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>
