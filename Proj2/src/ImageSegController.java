@@ -3,10 +3,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -95,12 +92,7 @@ public class ImageSegController
 
 		if (!this.cameraActive)
 		{
-			// disable setting checkboxes
-			//this.canny.setDisable(true);
-			//this.dilateErode.setDisable(true);
-
-			// start the video capture
-			this.capture.open(1);
+			this.capture.open(0);
 
 			// is the video stream available?
 			if (this.capture.isOpened())
@@ -216,14 +208,21 @@ public class ImageSegController
 		String value= "";
 		String suit= "";
 
-		String[] card = c.split(".");
+		String[] card = c.split("\\.");
+
+		//System.out.println(Arrays.toString(card));
+
 		if(card[0].length()==2){
+			//System.out.println("tem 2");
 			char[] Str2 = new char[2];
+			char[] Str3 = new char[2];
 			card[0].getChars(0, 1, Str2, 0);
+			card[0].getChars(1, 2, Str3, 0);
 			value = Character.toString(Str2[0]);
-			suit = Character.toString(Str2[1]);
+			suit = Character.toString(Str3[0]);
 
 		}else if(card[0].length()==3){
+			//System.out.println("tem 3");
 			char[] Str2 = new char[3];
 			card[0].getChars(0, 2, Str2, 0);
 			suit = Character.toString(Str2[2]);
@@ -231,7 +230,9 @@ public class ImageSegController
 		}
 
 		value =parseValue(value);
+
 		suit = parseSuit(suit);
+
 
 		return new Card(value, suit);
 
@@ -263,8 +264,7 @@ public class ImageSegController
 		if(v.equals("k")){
 			return "rei";
 		}
-		if(v.equals("k" +
-				"j")){
+		if(v.equals("j")){
 			return "valete";
 		}
 		if(v.equals("q")){
@@ -357,7 +357,7 @@ public class ImageSegController
 			dst_mat.put(0,0,0.0,0.0,0.0,499.0, 499.0,499.0,499.0,0.0);
 			Mat card = new Mat();
 
-			if(aproxMtx.rows()==4) {//é rectangulo
+			if(aproxMtx.rows()==4) {//ï¿½ rectangulo
 				Imgproc.warpPerspective(colorimage, card, Imgproc.getPerspectiveTransform(aproxMtx, dst_mat), new Size(450, 450));
 				Imgproc.cvtColor(card, card, Imgproc.COLOR_BGR2GRAY);
 				Imgproc.GaussianBlur(card, card, new Size(5, 5), 2, 2);
@@ -418,7 +418,7 @@ public class ImageSegController
 				//System.out.println(files[cardj].getName());
 			}
 		}
-		//Interface gráfica
+		//Interface grï¿½fica
 		for(int i=0; i<cartas.size();i++){
 			switch (i){
 				case 0:
@@ -458,7 +458,7 @@ public class ImageSegController
 			}
 			if(pontos.get(i).x > xmax){
 				xmax = pontos.get(i).x;
-				p4 = i;
+				p3 = i;
 			}
 			if(pontos.get(i).y < ymin){
 				ymin = pontos.get(i).y;
@@ -476,19 +476,38 @@ public class ImageSegController
 			System.out.println(cartas.get(p3));
 			System.out.println(cartas.get(p4));
 			System.out.println("------------------------------------");
-/*
+
 			Hearts jogo = new Hearts();
 
 			jogo.addCard(parseCard(cartas.get(p1)).getValue(),parseCard(cartas.get(p1)).getSuit());
+
 			jogo.addCard(parseCard(cartas.get(p2)).getValue(),parseCard(cartas.get(p2)).getSuit());
 			jogo.addCard(parseCard(cartas.get(p3)).getValue(),parseCard(cartas.get(p3)).getSuit());
 			jogo.addCard(parseCard(cartas.get(p4)).getValue(),parseCard(cartas.get(p4)).getSuit());
 			int winner = jogo.getRoundWinner();
-			Imgproc.putText(colorimage, parseCard(cartas.get(p1)).getValue()+" "+parseCard(cartas.get(p1)).getSuit(), pontos.get(p1),1,1,new Scalar(0,0,0));
-			Imgproc.putText(colorimage, parseCard(cartas.get(p2)).getValue()+" "+parseCard(cartas.get(p2)).getSuit(), pontos.get(p2),1,1,new Scalar(0,0,0));
-			Imgproc.putText(colorimage, parseCard(cartas.get(p3)).getValue()+" "+parseCard(cartas.get(p3)).getSuit(), pontos.get(p3),1,1,new Scalar(0,0,0));
-			Imgproc.putText(colorimage, parseCard(cartas.get(p4)).getValue()+" "+parseCard(cartas.get(p4)).getSuit(), pontos.get(p4),1,1,new Scalar(0,0,0));
-*/
+
+			Imgproc.putText(colorimage, parseCard(cartas.get(p1)).getValue()+" "+parseCard(cartas.get(p1)).getSuit(), pontos.get(p1),5,2,new Scalar(255,255,255));
+			Imgproc.putText(colorimage, parseCard(cartas.get(p2)).getValue()+" "+parseCard(cartas.get(p2)).getSuit(), pontos.get(p2),5,2,new Scalar(255,255,255));
+			Imgproc.putText(colorimage, parseCard(cartas.get(p3)).getValue()+" "+parseCard(cartas.get(p3)).getSuit(), pontos.get(p3),5,2,new Scalar(255,255,255));
+			Imgproc.putText(colorimage, parseCard(cartas.get(p4)).getValue()+" "+parseCard(cartas.get(p4)).getSuit(), pontos.get(p4),5,2,new Scalar(255,255,255));
+
+			switch (winner){
+				case 0:
+					Imgproc.putText(colorimage, parseCard(cartas.get(p1)).getValue()+" "+parseCard(cartas.get(p1)).getSuit(), pontos.get(p1),5,2,new Scalar(0,255,255));
+					break;
+				case 1:
+					Imgproc.putText(colorimage, parseCard(cartas.get(p2)).getValue()+" "+parseCard(cartas.get(p2)).getSuit(), pontos.get(p2),5,2,new Scalar(0,255,255));
+					break;
+				case 2:
+					Imgproc.putText(colorimage, parseCard(cartas.get(p3)).getValue()+" "+parseCard(cartas.get(p3)).getSuit(), pontos.get(p3),5,2,new Scalar(0,255,255));
+					break;
+				case 3:
+					Imgproc.putText(colorimage, parseCard(cartas.get(p4)).getValue()+" "+parseCard(cartas.get(p4)).getSuit(), pontos.get(p4),5,2,new Scalar(0,255,255));
+					break;
+			}
+
+
+			Imgcodecs.imwrite("print.png",colorimage);
 
 
 		}

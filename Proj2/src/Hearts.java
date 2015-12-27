@@ -55,7 +55,7 @@ public class Hearts {
             this.cards = cards;
     }
 
-    private static int getRoundWinner() {
+    public static int getRoundWinner() {
         String firstCardSuit = cards.get(winningPlayer).getSuit();
         String firstCardValue = cards.get(winningPlayer).getValue();
         int nHearts = 0;
@@ -95,12 +95,14 @@ public class Hearts {
                 return false;
     }
 
-    private static void getWinner() {
+    public static int getWinner() {
         Collections.sort(players);
 
         System.out.print("Vencedor: ");
         for (int i = 0; i < players.size(); i++) {
             System.out.println("Jogador " + players.get(i).getId() + " com " + players.get(i).getNumberOfHearts() + " copas");
         }
+
+        return players.get(0).getId();
     }
 }
