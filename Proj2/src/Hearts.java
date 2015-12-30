@@ -9,7 +9,7 @@ import org.opencv.core.Mat;*/
 public class Hearts {
 
     private static ArrayList<Player> players = new ArrayList<>();
-    private static ArrayList<Card> cards = new ArrayList<>();
+    private static ArrayList<Card> cards = new ArrayList<>(), previousRound = new ArrayList<>();
     private static int nRounds = 1, winningPlayer = 0;
 
     public static HashMap<String, Integer> cardValue = new HashMap<>();
@@ -56,34 +56,37 @@ public class Hearts {
     }
 
     public static int getRoundWinner() {
-        String firstCardSuit = cards.get(winningPlayer).getSuit();
-        String firstCardValue = cards.get(winningPlayer).getValue();
-        int nHearts = 0;
-        nRounds++;
+        if (cards != previousRound) {
+            String firstCardSuit = cards.get(winningPlayer).getSuit();
+            String firstCardValue = cards.get(winningPlayer).getValue();
+            int nHearts = 0;
+            nRounds++;
 
-        // Encontrar jogador vencedor da ronda, que vai apanhar as cartas e jogar primeiro a seguir
-        for (int i = 0; i < 4; i++) {
-            if (cards.get(i).getSuit() == firstCardSuit) {
-                if (valueBiggerThan(cards.get(i).getValue(), firstCardValue)) {
-                    winningPlayer = i;
+            // Encontrar jogador vencedor da ronda, que vai apanhar as cartas e jogar primeiro a seguir
+            for (int i = 0; i < 4; i++) {
+                if (cards.get(i).getSuit() == firstCardSuit) {
+                    if (valueBiggerThan(cards.get(i).getValue(), firstCardValue)) {
+                        winningPlayer = i;
+                    }
                 }
+
+                //Se a carta for copa ou dama de espadas, contar o numero de copas que vao ser apanhadas
+                if (cards.get(i).getSuit().equals("copas"))
+                    nHearts++;
+                else if (cards.get(i).getSuit().equals("espadas") && cards.get(i).getValue().equals("dama"))
+                    nHearts += 13;
             }
 
-            //Se a carta for copa ou dama de espadas, contar o numero de copas que vao ser apanhadas
-            if (cards.get(i).getSuit().equals("copas"))
-                nHearts++;
-            else if (cards.get(i).getSuit().equals("espadas") && cards.get(i).getValue().equals("dama"))
-                nHearts += 13;
+            System.out.println("Vencedor da ronda: Jogador " + (winningPlayer + 1) + ", apanha " + nHearts + " copa(s)");
+
+            //Adicionar copas ao vencedor da ronda
+            players.get(winningPlayer).addHearts(nHearts);
+            previousRound = new ArrayList<>(cards);
+            cards = new ArrayList<>();
+
+            if (nRounds == 13)
+                getWinner();
         }
-
-        System.out.println("Vencedor da ronda: Jogador "+ (winningPlayer + 1) + ", apanha " + nHearts + " copa(s)");
-
-        //Adicionar copas ao vencedor da ronda
-        players.get(winningPlayer).addHearts(nHearts);
-        cards = new ArrayList<>();
-
-        if (nRounds == 13)
-            getWinner();
 
         return winningPlayer;
     }
