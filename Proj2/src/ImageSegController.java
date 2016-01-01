@@ -92,7 +92,7 @@ public class ImageSegController
 
 		if (!this.cameraActive)
 		{
-			this.capture.open(0);
+			this.capture.open(1);
 
 			// is the video stream available?
 			if (this.capture.isOpened())
@@ -470,7 +470,7 @@ public class ImageSegController
 			}
 		}
 		if(cartas.size()==4) {
-			System.out.println("Cartas:-----------------------------");
+			System.out.println("\nCartas:-----------------------------");
 			System.out.println(cartas.get(p1));
 			System.out.println(cartas.get(p2));
 			System.out.println(cartas.get(p3));

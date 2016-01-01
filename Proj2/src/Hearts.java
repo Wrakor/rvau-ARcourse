@@ -1,10 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-/*import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;*/
-
 
 public class Hearts {
 
@@ -64,7 +60,7 @@ public class Hearts {
 
             // Encontrar jogador vencedor da ronda, que vai apanhar as cartas e jogar primeiro a seguir
             for (int i = 0; i < 4; i++) {
-                if (cards.get(i).getSuit() == firstCardSuit) {
+                if (cards.get(i).getSuit().equals(firstCardSuit)) {
                     if (valueBiggerThan(cards.get(i).getValue(), firstCardValue)) {
                         winningPlayer = i;
                     }
@@ -92,10 +88,7 @@ public class Hearts {
     }
 
     private static boolean valueBiggerThan(String value1, String value2) {
-            if (cardValue.get(value1) > cardValue.get(value2))
-                return true;
-            else
-                return false;
+        return cardValue.get(value1) > cardValue.get(value2);
     }
 
     public static int getWinner() {
